@@ -127,7 +127,7 @@ exports.get = asyncHandler(async (req, res) => {
 
 // Update admin
 exports.update = asyncHandler(async (req, res) => {
-    const { email, name, phone, role,instagram,facebook,twitter,linkedin,youtube,whatsapp,address } = req.body;
+    const { email, name, phone, role,instagram,facebook,twitter,linkedin,youtube,whatsapp,address, username,skills,bio } = req.body;
     const { id } = req.params;
   
     try {
@@ -150,6 +150,9 @@ exports.update = asyncHandler(async (req, res) => {
       admin.name = name;
       admin.phone = phone;
       admin.instagram = instagram;
+      admin.username = username;
+      admin.skills = skills;
+      admin.bio = bio;
       admin.facebook = facebook;
       admin.twitter = twitter;
       admin.linkedin = linkedin;
@@ -205,6 +208,9 @@ exports.login = asyncHandler(async (req, res) => {
           image: admin.image,
           password: password,
           instagram: admin.instagram,
+          username: admin.username,
+          skills: admin.skills,
+          bio: admin.bio,
           facebook: admin.facebook,
           twitter: admin.twitter,
           linkedin: admin.linkedin,

@@ -46,6 +46,9 @@ const adminSchema = new mongoose.Schema({
     linkedin:String,
     whatsapp:String,
     address:String,
+    username:String,
+    skills:String,
+    bio:String, 
 });
 
 adminSchema.pre("save", async function (next) {
