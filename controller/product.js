@@ -6,6 +6,7 @@ const WhishList = require("../models/favorites");
 const CustomerOrder = require("../models/customerorder")
 const mongoose = require('mongoose');
 
+
 // Function to generate new product ID
 const generateProductId = async () => {
   const lastProduct = await Product.findOne().sort({ createdAt: -1 }); // Find the last product by creation time
