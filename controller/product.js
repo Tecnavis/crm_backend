@@ -1,8 +1,11 @@
 const asyncHandler = require("express-async-handler");
 const Product = require("../models/products");
 const ShoppingBag = require("../models/shoppingbag");
+const Customercart = require("../models/customercart");
 const WhishList = require("../models/favorites");
 const CustomerOrder = require("../models/customerorder")
+const mongoose = require('mongoose');
+
 // Function to generate new product ID
 const generateProductId = async () => {
   const lastProduct = await Product.findOne().sort({ createdAt: -1 }); // Find the last product by creation time
@@ -128,27 +131,71 @@ exports.update = asyncHandler(async (req, res) => {
 
 
 // delete product
+// exports.deleteProduct = asyncHandler(async (req, res) => {
+//   const product = await Product.findByIdAndDelete(req.params.id);
+
+//   if (!product) {
+//     return res.status(404).json({ message: "Product not found" });
+//   }
+
+//   // Remove the product from all shopping bags by its product ID
+//   await ShoppingBag.updateMany(
+//     {},
+//     { $pull: { products: { productId: product._id } } }
+//   );
+
+//   // Remove all wishlist entries with the product ID
+//   await WhishList.deleteMany({ productId: product._id });
+
+//   // Remove all cart entries with the product ID
+//   await Customercart.deleteMany({ productId: product._id });
+
+//   await CustomerOrder.deleteMany({productId: product._id})
+
+//   res.status(200).json({ message: "Product deleted successfully" });
+// });
+
+// delete product
 exports.deleteProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findByIdAndDelete(req.params.id);
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
-  if (!product) {
-    return res.status(404).json({ message: "Product not found" });
+  try {
+    const product = await Product.findByIdAndDelete(req.params.id, { session });
+
+    if (!product) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    // Remove the product from all shopping bags by its product ID
+    await ShoppingBag.updateMany(
+      {},
+      { $pull: { products: { productId: product._id } } },
+      { session }
+    );
+
+    // Remove all wishlist entries with the product ID
+    await WhishList.deleteMany({ productId: product._id }, { session });
+
+    // Remove all cart entries with the product ID
+    await Customercart.deleteMany({ productId: product._id }, { session });
+
+    // Remove all customer orders with the product ID
+    await CustomerOrder.deleteMany({ productId: product._id }, { session });
+
+    await session.commitTransaction();
+    session.endSession();
+
+    res.status(200).json({ message: "Product deleted successfully" });
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    console.error("Error deleting product:", error);
+    res.status(500).json({ message: "Failed to delete product" });
   }
-
-  // Remove the product from all shopping bags by its product ID
-  await ShoppingBag.updateMany(
-    {},
-    { $pull: { products: { productId: product._id } } }
-  );
-
-  // Remove all wishlist entries with the product ID
-  await WhishList.deleteMany({ productId: product._id });
-
-  await CustomerOrder.deleteMany({productId: product._id})
-
-  res.status(200).json({ message: "Product deleted successfully" });
 });
-
 
 //fetch products by category
 exports.getProductsByCategory = async (req, res) => {
