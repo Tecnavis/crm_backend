@@ -27,13 +27,13 @@ var customerorder = require('./routes/customerorder')
 connectDB()
 
 var app = express();
-app.use(express.json({ limit: '100mb' }));  // Increased limit for JSON payloads
-app.use(express.urlencoded({ limit: '100mb', extended: true }));
 app.use(cors({
-  origin: ["http://localhost:5173","http://localhost:5174","http://localhost:3001","https://crm.tecnavis.com","https://milagro.tecnavis.com"],
-  method:["PUT","DELETE","PUSH","GET","POST","PATCH"],
-  credential:true
-}))
+  origin: ["http://localhost:5173", "http://localhost:5174", "http://localhost:3001", "https://crm.tecnavis.com", "https://milagro.tecnavis.com"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  credentials: true // Allows cookies or authentication headers
+}));
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ extended: true }));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
