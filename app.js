@@ -27,8 +27,8 @@ var customerorder = require('./routes/customerorder')
 connectDB()
 
 var app = express();
-app.use(express.json({ limit: '50mb' }));  // Increased limit for JSON payloads
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.json({ limit: '100mb' }));  // Increased limit for JSON payloads
+app.use(express.urlencoded({ limit: '100mb', extended: true }));
 app.use(cors({
   origin: ["http://localhost:5173","http://localhost:5174","http://localhost:3001","https://crm.tecnavis.com","https://milagro.tecnavis.com"],
   method:["PUT","DELETE","PUSH","GET","POST","PATCH"],
