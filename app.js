@@ -27,8 +27,6 @@ var customerorder = require('./routes/customerorder')
 connectDB()
 
 var app = express();
-app.use(express.json({ limit: '10mb' }));  // Increase JSON body size limit to 10MB
-app.use(express.urlencoded({ limit: '10mb', extended: true })); 
 app.use(express.json({ limit: '50mb' }));  // Increased limit for JSON payloads
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors({
