@@ -28,7 +28,7 @@ connectDB()
 
 var app = express();
 app.use(cors({
-  origin: ["https://crm.tecnavis.com", "https://milagro.tecnavis.com"],
+  origin: ["https://crm.tecnavis.com", "https://api.crm.tecnavis.com/product","https://milagro.tecnavis.com"],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   credentials: true // Allows cookies or authentication headers
 }));
