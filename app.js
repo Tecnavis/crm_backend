@@ -28,12 +28,13 @@ connectDB()
 
 var app = express();
 app.use(cors({
-  origin: ["https://crm.tecnavis.com", "https://api.crm.tecnavis.com/product","https://milagro.tecnavis.com"],
+  origin: ["http://localhost:5173", "http://localhost:5174", "http://localhost:3001", "https://crm.tecnavis.com", "https://milagro.tecnavis.com"],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   credentials: true // Allows cookies or authentication headers
 }));
-app.use(express.json({ limit: '100mb' }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "100mb" }));
+app.use(express.urlencoded({ extended: true, limit: "100mb" }));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');

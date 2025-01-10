@@ -14,12 +14,10 @@ const storage = multer.diskStorage({
 
 // //product routes
 // var upload = multer({ storage: storage }).fields([{ name: 'images', maxCount: 10 }, { name: 'coverimage', maxCount: 1 }]);
-var upload = multer({
+const upload = multer({
   storage: storage,
-  limits: {
-    fileSize: 50 * 1024 * 1024, // 5MB
-  },
-}).fields([{ name: 'images', maxCount: 10 }, { name: 'coverimage', maxCount: 1 }]);
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB
+}).fields([{ name: "images", maxCount: 10 }, { name: "coverimage", maxCount: 1 }]);
 
 router.post('/', upload, Controller.create);
 router.get('/',Controller.getAll)
